@@ -45,7 +45,7 @@ app.use("/api/projects", projectRoutes);
 app.use("/api/files", fileRoutes);
 app.use("/api/run", runRoutes);
 
-app.get('/' , (res) => res.send('Server is Working Fine'))
+app.get('/' , (req,res) => res.send("Hello Server"))
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
