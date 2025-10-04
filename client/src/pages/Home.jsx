@@ -14,7 +14,7 @@ import {
   FaLinkedin,
 } from "react-icons/fa";
 
-// Staggered animation variants
+// Animation variants
 const fadeUp = {
   hidden: { opacity: 0, y: 40 },
   show: (i = 0) => ({
@@ -24,7 +24,7 @@ const fadeUp = {
   }),
 };
 
-// Neon Dot Background
+// Neon floating dot background
 const DotBackground = () => {
   const dots = Array.from({ length: 50 });
   return (
@@ -57,17 +57,17 @@ function Home() {
     <div className="overflow-hidden flex flex-col min-h-screen bg-black text-white">
       {/* 🔥 HERO SECTION */}
       <section className="relative flex flex-col items-center justify-center min-h-[80vh] text-center px-6">
-        {/* Dot Animation */}
+        {/* Dot Background */}
         <DotBackground />
 
-        {/* Background blobs */}
+        {/* Background blobs - fixed pointer issue */}
         <motion.div
-          className="absolute w-72 h-72 bg-cyan-500/20 rounded-full blur-3xl top-10 left-10"
+          className="absolute w-72 h-72 bg-cyan-500/20 rounded-full blur-3xl top-10 left-10 pointer-events-none z-0"
           animate={{ scale: [1, 1.3, 1], opacity: [0.3, 0.7, 0.3] }}
           transition={{ repeat: Infinity, duration: 6 }}
         />
         <motion.div
-          className="absolute w-96 h-96 bg-blue-500/20 rounded-full blur-3xl bottom-10 right-10"
+          className="absolute w-96 h-96 bg-blue-500/20 rounded-full blur-3xl bottom-10 right-10 pointer-events-none z-0"
           animate={{ scale: [1.2, 0.9, 1.2], opacity: [0.2, 0.6, 0.2] }}
           transition={{ repeat: Infinity, duration: 7 }}
         />
@@ -92,20 +92,34 @@ function Home() {
           and AI-powered assistance.
         </motion.p>
 
+        {/* Button (fixed + animated) */}
         <motion.div
           variants={fadeUp}
           custom={2}
           initial="hidden"
           animate="show"
+          className="relative z-20"
         >
-          <Link to={'/dashboard'}>
-          <motion.button
-            className="mt-8 px-6 py-3 bg-gradient-to-r from-cyan-500 to-blue-500 text-black font-semibold rounded-xl shadow-[0_0_20px_#22d3ee] flex items-center gap-2 z-10"
-            whileHover={{ scale: 1.1, rotate: 1 }}
-            whileTap={{ scale: 0.95 }}
-          >
-            Get Started <ArrowRight size={18} />
-          </motion.button>
+          <Link to="/dashboard">
+            <motion.button
+              className="mt-8 px-8 py-3 bg-gradient-to-r from-cyan-500 to-blue-500 text-black font-semibold rounded-xl shadow-[0_0_25px_#22d3ee] flex items-center gap-2 relative overflow-hidden"
+              whileHover={{ scale: 1.1, rotate: 1 }}
+              whileTap={{
+                scale: 0.95,
+                boxShadow: "0 0 30px #22d3ee, 0 0 60px #3b82f6",
+              }}
+            >
+              <span className="relative z-10 flex items-center gap-2">
+                Get Started <ArrowRight size={18} />
+              </span>
+
+              {/* Neon pulse animation */}
+              <motion.span
+                className="absolute inset-0 bg-cyan-400 opacity-0 rounded-xl"
+                whileTap={{ opacity: [0.6, 0, 0], scale: [1, 2, 3] }}
+                transition={{ duration: 0.6 }}
+              />
+            </motion.button>
           </Link>
         </motion.div>
       </section>
@@ -121,6 +135,7 @@ function Home() {
         >
           Why Choose Our IDE?
         </motion.h2>
+
         <div className="grid md:grid-cols-3 gap-10 max-w-5xl mx-auto">
           {[
             {
@@ -220,7 +235,7 @@ function Home() {
             whileInView={{ opacity: 1 }}
             transition={{ duration: 1 }}
           >
-            © {new Date().getFullYear()} CODE IDE. All rights reserved.
+            © {new Date().getFullYear()} XAVIER'S CODE IDE. All rights reserved.
           </motion.h3>
 
           <div className="flex gap-6 text-2xl">
