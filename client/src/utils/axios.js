@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const instance = axios.create({
-  baseURL: "https://xavier-s-ide-server.vercel.app/api",
+  baseURL: "https://xavier-s-ide-server.onrender.com/api",
   withCredentials : true
 });
 
