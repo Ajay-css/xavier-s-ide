@@ -21,43 +21,42 @@ const langMap = {
 
 router.post("/", async (req, res) => {
   const { code, language } = req.body;
+
   try {
     const langId = langMap[language] || 63;
 
-    // Create submission
+    // ✅ 1. Create submission (Judge0 official free API, no API key)
     const { data: submission } = await axios.post(
-      "https://judge0-ce.p.rapidapi.com/submissions",
+      "https://ce.judge0.com/submissions/?base64_encoded=false&wait=false",
       {
         source_code: code,
         language_id: langId,
-        stdin: ""
+        stdin: "",
       },
       {
         headers: {
           "Content-Type": "application/json",
-          "X-RapidAPI-Key": process.env.RAPIDAPI_KEY,
-          "X-RapidAPI-Host": "judge0-ce.p.rapidapi.com"
-        }
+        },
       }
     );
 
     const token = submission.token;
 
-    // Poll until done
+    // ✅ 2. Poll until execution is complete
     let result;
     do {
-      await new Promise(r => setTimeout(r, 1500));
+      await new Promise((r) => setTimeout(r, 1500));
       result = await axios.get(
-        `https://judge0-ce.p.rapidapi.com/submissions/${token}`,
+        `https://ce.judge0.com/submissions/${token}?base64_encoded=false`,
         {
           headers: {
-            "X-RapidAPI-Key": process.env.RAPIDAPI_KEY,
-            "X-RapidAPI-Host": "judge0-ce.p.rapidapi.com"
-          }
+            "Content-Type": "application/json",
+          },
         }
       );
     } while (result.data.status.id <= 2);
 
+    // ✅ 3. Send back output
     res.json({
       output:
         result.data.stdout ||
@@ -66,7 +65,7 @@ router.post("/", async (req, res) => {
         "No output",
     });
   } catch (err) {
-    console.error(err.message);
+    console.error("Judge0 Error:", err.message);
     res.status(500).json({ error: "Execution failed" });
   }
 });
