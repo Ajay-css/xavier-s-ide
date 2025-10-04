@@ -2,6 +2,7 @@ import axios from "axios";
 
 const instance = axios.create({
   baseURL: "https://xavier-s-ide-server.vercel.app/api",
+  withCredentials : true
 });
 
 instance.interceptors.request.use((config) => {
