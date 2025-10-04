@@ -49,6 +49,9 @@ class Program {
   color: white;
   font-family: sans-serif;
 }`,
+php : `<?php
+    echo "Welcome To CODE IDE Created By Ajay Arumugam";
+?>`
 };
 
 // Helper to map extensions → languages

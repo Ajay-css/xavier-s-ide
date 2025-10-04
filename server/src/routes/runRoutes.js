@@ -25,7 +25,7 @@ router.post("/", async (req, res) => {
   try {
     const langId = langMap[language] || 63;
 
-    // ✅ 1. Create submission (Judge0 official free API, no API key)
+    // ✅ 1. Create submission (Judge0 official free API — no key required)
     const { data: submission } = await axios.post(
       "https://ce.judge0.com/submissions/?base64_encoded=false&wait=false",
       {
@@ -56,16 +56,24 @@ router.post("/", async (req, res) => {
       );
     } while (result.data.status.id <= 2);
 
-    // ✅ 3. Send back output
+    // ✅ 3. Format and return output safely
     res.json({
-      output:
+      output: (
         result.data.stdout ||
         result.data.stderr ||
         result.data.compile_output ||
-        "No output",
+        "No output"
+      )
+        // Remove broken characters like "r><br>"
+        .replace(/^[^A-Za-z0-9]+/, "")
+        // Convert <br> tags to newlines
+        .replace(/<br\s*\/?>/gi, "\n")
+        // Trim excess whitespace
+        .trim(),
     });
+
   } catch (err) {
-    console.error("Judge0 Error:", err.message);
+    console.error("Execution Error:", err.message);
     res.status(500).json({ error: "Execution failed" });
   }
 });
