@@ -14,7 +14,7 @@ connectDB();
 const app = express();
 
 app.use(cors({
-    origin : "https://xavier-s-ide-server.vercel.app",
+    origin : "https://xavierside.vercel.app",
     credentials : true,
 }));
 app.use(express.json());
