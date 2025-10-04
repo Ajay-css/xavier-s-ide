@@ -13,7 +13,10 @@ connectDB();
 
 const app = express();
 
-app.use(cors());
+app.use(cors({
+    origin : "https://xavier-s-ide-server.vercel.app",
+    credentials : true,
+}));
 app.use(express.json());
 
 // Routes
