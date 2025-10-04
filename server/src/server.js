@@ -15,8 +15,8 @@ const app = express();
 
 // ✅ Proper CORS setup
 const allowedOrigins = [
-  "https://xavierside.vercel.app", // your frontend URL
-  "http://localhost:5173",         // optional: for local dev (remove if not needed)
+  "https://xavierside.vercel.app", // frontend
+  "http://localhost:5173",         // optional for local dev
 ];
 
 app.use(
@@ -34,8 +34,8 @@ app.use(
   })
 );
 
-// ✅ Handle preflight requests explicitly
-app.options("*", cors());
+// ✅ Fix for Express 5: use regex instead of "*"
+app.options(/.*/, cors());
 
 app.use(express.json());
 
@@ -45,8 +45,7 @@ app.use("/api/projects", projectRoutes);
 app.use("/api/files", fileRoutes);
 app.use("/api/run", runRoutes);
 
-app.get('/' , (_,res) => res.send("<h1>Server is Working Fine!</h1>"))
+app.get('/' , (res) => res.send('Server is Working Fine'))
 
-// ✅ Start server
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
